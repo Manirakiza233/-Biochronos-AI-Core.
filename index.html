@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio-Chronos AI - Global ICU Command & Intelligence Core</title>
+    <style>
+        /* CSS CORE - PROFESSIONAL MEDICAL THEME */
+        :root {
+            --bg: #05070a;
+            --card: #0d1117;
+            --accent: #00e5ff;
+            --green: #00ff41;
+            --danger: #ff4b2b;
+            --sidebar: #010409;
+            --text: #c9d1d9;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            margin: 0; font-family: 'Inter', 'Segoe UI', sans-serif;
+            background: var(--bg); color: var(--text);
+            display: flex; height: 100vh; overflow: hidden;
+        }
+
+        /* SIDEBAR NAVIGATION */
+        .sidebar {
+            width: 260px; background: var(--sidebar);
+            padding: 25px; border-right: 1px solid #30363d;
+            display: flex; flex-direction: column; flex-shrink: 0;
+        }
+
+        .profile { text-align: center; margin-bottom: 30px; }
+        .avatar {
+            width: 70px; height: 70px; background: linear-gradient(45deg, #1f6feb, #00e5ff);
+            border-radius: 12px; margin: 0 auto 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px; color: white; font-weight: bold;
+            border: 2px solid var(--accent); overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+        }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        nav ul { list-style: none; padding: 0; margin-top: 20px; }
+        nav li {
+            padding: 15px; margin-bottom: 8px; cursor: pointer;
+            border-radius: 10px; transition: 0.3s;
+            color: #8b949e; display: flex; align-items: center; gap: 12px;
+            font-size: 14px; font-weight: 500;
+        }
+        nav li:hover, nav li.active { background: #161b22; color: var(--accent); border-left: 5px solid var(--accent); }
+
+        /* MAIN AREA */
+        .container { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        .emergency-mode { animation: redFlash 1.5s infinite; }
+        @keyframes redFlash { 50% { box-shadow: inset 0 0 100px rgba(255, 75, 43, 0.2); border: 4px solid var(--danger); } }
+
+        .page { display: none; height: 100%; padding: 30px; box-sizing: border-box; overflow-y: auto; }
+        .page.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* MONITORING GRID */
+        .monitor-grid { display: grid; grid-template-columns: 280px 1fr 340px; gap: 25px; height: calc(100vh - 120px); }
+        
+        .fleet-scroller { background: #010409; border: 1px solid #30363d; border-radius: 18px; overflow-y: auto; padding: 12px; }
+        .p-row {
+            padding: 14px; background: #0d1117; margin-bottom: 10px; border-radius: 10px;
+            cursor: pointer; border: 1px solid transparent; display: flex;
+            justify-content: space-between; font-size: 12px; transition: 0.2s;
+        }
+        .p-row:hover { border-color: var(--accent); background: #161b22; }
+        .p-row.critical { border-color: var(--danger); background: rgba(255, 75, 43, 0.1); }
+
+        /* PROFESSIONAL WAVES */
+        .wave-card {
+            background: #000; border: 1px solid #30363d; border-radius: 20px;
+            padding: 20px; margin-bottom: 20px; position: relative;
+            box-shadow: inset 0 0 30px rgba(0,255,65,0.05);
+        }
+        canvas { width: 100%; height: 140px; display: block; }
+        .hr-label { position: absolute; top: 15px; left: 20px; font-size: 10px; color: #8b949e; text-transform: uppercase; }
+        .hr-value { position: absolute; top: 10px; right: 25px; font-size: 45px; font-weight: 900; }
+
+        /* AI CLINICAL REASONING LOG */
+        .ai-log-card { background: #010409; border: 1px solid #30363d; border-radius: 20px; display: flex; flex-direction: column; padding: 20px; }
+        #clinicalLog { flex-grow: 1; overflow-y: auto; font-family: 'Consolas', monospace; font-size: 11px; line-height: 1.6; color: #c9d1d9; }
+        .log-entry { margin-bottom: 15px; border-bottom: 1px solid #161b22; padding-bottom: 10px; }
+        .log-time { color: var(--accent); font-weight: bold; }
+        .log-msg { display: block; margin: 4px 0; font-size: 12px; }
+        .log-reason { color: #8b949e; font-size: 10px; display: block; }
+        .log-action { color: var(--green); font-weight: bold; margin-top: 5px; display: block; background: rgba(0,255,65,0.1); padding: 5px; border-radius: 5px; }
+
+        /* 3D VISUALIZERS */
+        .visual-box { height: 260px; background: #000; border-radius: 18px; border: 1px solid #30363d; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .heart-3d { width: 80px; height: 80px; background: var(--danger); border-radius: 50%; box-shadow: 0 0 50px var(--danger); animation: heartBeat 0.8s infinite; }
+        @keyframes heartBeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
+        
+        .dna-helix { width: 10px; height: 180px; background: linear-gradient(var(--accent), transparent); animation: rotateDNA 4s linear infinite; }
+        @keyframes rotateDNA { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
+
+        /* FORMS */
+        .card { background: var(--card); border: 1px solid #30363d; border-radius: 20px; padding: 25px; margin-bottom: 25px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        input, select { width: 100%; padding: 14px; background: #010409; border: 1px solid #30363d; color: white; border-radius: 10px; margin-top: 8px; font-size: 14px; }
+        button { background: var(--accent); color: black; border: none; padding: 16px; border-radius: 10px; font-weight: 800; cursor: pointer; text-transform: uppercase; width: 100%; margin-top: 20px; transition: 0.3s; }
+        button:hover { box-shadow: 0 0 20px var(--accent); }
+
+        #chatMessages { height: 320px; overflow-y: auto; background: #010409; padding: 20px; border-radius: 15px; border: 1px solid #30363d; }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="profile">
+            <div class="avatar" id="sideAvat">M</div>
+            <div id="sideName" style="font-weight: 800; font-size: 18px;">DR. MANIRAKIZA</div>
+            <small style="color: var(--green); letter-spacing: 2px;">GLOBAL ICU CORE</small>
+        </div>
+        <nav>
+            <ul>
+                <li class="active" onclick="showPage('monitoring')">📊 Mass Monitoring</li>
+                <li onclick="showPage('admission')">👤 Global Admission</li>
+                <li onclick="showPage('surgical')">🔪 Surgical Simulation</li>
+                <li onclick="showPage('telomere')">🧬 Genetic Aging Lab</li>
+                <li onclick="showPage('chat')">💬 Intelligence Core</li>
+            </ul>
+        </nav>
+        <div style="margin-top: auto; color: #ff7b72; font-size: 12px; font-weight: bold; cursor: pointer; text-align: center;">TERMINATE SESSION</div>
+    </div>
+
+    <div class="container" id="mainWrapper">
+        
+        <!-- MONITORING PAGE (EARLY WARNING SYSTEM) -->
+        <div id="monitoring" class="page active">
+            <div class="monitor-grid">
+                <!-- Fleet 100 Patients -->
+                <div class="fleet-sidebar">
+                    <div style="padding: 10px; border-bottom: 1px solid #30363d; font-size: 10px; color: #8b949e;">ICU FLEET (100)</div>
+                    <div id="fleetList"></div>
+                </div>
+
+                <!-- Main Monitor -->
+                <div class="main-monitor">
+                    <div class="wave-card">
+                        <div class="hr-label">ECG LEAD II (CLINICAL)</div>
+                        <div class="hr-value" id="bpmVal" style="color: var(--green);">72</div>
+                        <canvas id="ecgCanvas"></canvas>
+                    </div>
+                    <div class="wave-card">
+                        <div class="hr-label">EEG NEURAL ALPHA-WAVE</div>
+                        <div class="hr-value" style="color: var(--accent); font-size: 20px;">STABLE</div>
+                        <canvas id="eegCanvas"></canvas>
+                    </div>
+                    <div class="card" style="display: flex; justify-content: space-between; border-left: 5px solid var(--accent);">
+                        <div>
+                            <h3 id="focusName" style="margin: 0; font-size: 24px;">Patient #1</h3>
+                            <small id="focusSub" style="color: var(--accent);">AI PREDICTION: T+10 MIN ANALYSIS ACTIVE</small>
+                        </div>
+                        <div style="text-align: right;">
+                            <small>MORTALITY RISK</small>
+                            <div id="riskDisplay" style="color: var(--green); font-size: 30px; font-weight: 900;">0.2%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI INTELLIGENT LOG -->
+                <div class="ai-log-card">
+                    <div style="font-size: 11px; font-weight: bold; color: var(--accent); margin-bottom: 10px;">AI CLINICAL REASONING LOG</div>
+                    <div id="clinicalLog">
+                        <div class="log-entry">[SYSTEM] Initializing Bio-Chronos Predictive Core...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADMISSION PAGE -->
+        <div id="admission" class="page">
+            <h2 style="color: var(--accent);">Global Patient Ingest</h2>
+            <div class="card">
+                <div class="grid-2">
+                    <div><label>Full Name</label><input type="text" id="inName" placeholder="Patient Name"></div>
+                    <div><label>ID / Passport</label><input type="text" placeholder="Document ID"></div>
+                    <div><label>Sex</label><select id="inSex"><option>Male</option><option>Female</option></select></div>
+                    <div><label>Medical Procedure</label><input type="text" id="inProc" placeholder="Diagnosis"></div>
+                </div>
+                <div class="grid-2" style="margin-top: 15px;">
+                    <div><label>Biometric Photo</label><input type="file" id="inPhoto" accept="image/*"></div>
+                    <div><label>Records</label><input type="file" multiple></div>
+                </div>
+                <button onclick="registerPatient()">SYNC TO FLEET COMMAND</button>
+            </div>
+        </div>
+
+        <!-- SURGICAL SIMULATION (3D) -->
+        <div id="surgical" class="page">
+            <h2 style="color: var(--accent);">Surgical Success Forecast</h2>
+            <div class="grid-2">
+                <div class="visual-box">
+                    <div class="heart-3d" id="heartModel"></div>
+                    <div style="position: absolute; bottom: 10px; font-size: 10px; color: var(--accent);">LIVE 3D HEMODYNAMIC SIMULATION</div>
+                </div>
+                <div class="card">
+                    <h3>Success Probability: <span style="color: var(--green);">98.4%</span></h3>
+                    <div style="margin-top: 20px; background: rgba(0,255,65,0.05); padding: 20px; border-radius: 12px; border-left: 5px solid var(--green);">
+                        <b>AI Clinical Reasoning:</b> <br><br>
+                        - Cardiac rhythm displays robust autonomic stability. <br>
+                        - <b>Reasoning:</b> QRS complex duration is within 96% of the peer norm. <br>
+                        - <b>Recommendation:</b> Safe to proceed with invasive induction.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GENETIC LAB (3D) -->
+        <div id="telomere" class="page">
+            <h2 style="color: var(--accent);">Genetic Telomere aging Lab</h2>
+            <div class="grid-2">
+                <div class="visual-box">
+                    <div class="dna-helix" style="left: 48%;"></div>
+                    <div style="position: absolute; bottom: 10px; font-size: 10px; color: var(--accent);">3D GENOMIC DNA SCAN</div>
+                </div>
+                <div class="card" style="text-align: center;">
+                    <small>BIOLOGICAL AGE OFFSET</small>
+                    <div style="font-size: 80px; font-weight: 900; color: var(--accent);">-7.4 Years</div>
+                    <div style="text-align: left; background: #010409; padding: 25px; border-radius: 15px; margin-top: 20px; border-left: 5px solid var(--accent);">
+                        <b>AI Genomic Reasoning:</b> <br><br>
+                        - <b>Discovery:</b> DNA strands show high telomere cap density. <br>
+                        - <b>Reasoning:</b> Low markers of chronic cellular inflammation detected. <br>
+                        - <b>Action:</b> High regenerative capacity confirmed.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CHAT CORE -->
+        <div id="chat" class="page">
+            <h2 style="color: var(--accent);">Multilingual Intelligence Core</h2>
+            <div class="card">
+                <select id="langSelect" style="width: 150px; margin-bottom: 10px;"><option value="rw-RW" selected>Ikinyarwanda</option><option value="en-US">English</option></select>
+                <div id="chatMessages"></div>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <input type="text" id="chatInput" placeholder="Analyze biology, chemistry, or vitals..." onkeypress="if(event.key === 'Enter') askAI()">
+                    <button onclick="askAI()" style="width: 100px; margin: 0;">SEND</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // NAVIGATION
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('nav li').forEach(l => l.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // FLEET 100
+        const fleetList = document.getElementById('fleetList');
+        let fleet = [];
+        for(let i=1; i<=100; i++) {
+            let p = { id: i, name: "Patient #"+i, hr: 72, proc: "General ICU" };
+            fleet.push(p);
+            let row = document.createElement('div');
+            row.className = 'p-row'; row.id = 'prow-'+i;
+            row.innerHTML = `<span>${p.name}</span><b id="phr-${i}">72</b>`;
+            row.onclick = () => focusOn(i);
+            fleetList.appendChild(row);
+        }
+
+        let focusedID = 1;
+        function focusOn(id) {
+            focusedID = id;
+            document.getElementById('focusName').innerText = fleet[id-1].name;
+            document.getElementById('sideName').innerText = fleet[id-1].name.toUpperCase();
+        }
+
+        function registerPatient() {
+            let n = document.getElementById('inName').value;
+            let ph = document.getElementById('inPhoto').files;
+            if(!n) return;
+            fleet[0].name = n;
+            document.getElementById('prow-1').querySelector('span').innerText = n;
+            if(ph && ph[0]) {
+                let r = new FileReader();
+                r.onload = (e) => document.getElementById('sideAvat').innerHTML = `<img src="${e.target.result}">`;
+                r.readAsDataURL(ph[0]);
+            }
+            focusOn(1); showPage('monitoring');
+        }
+
+        // WAVEFORM ENGINES
+        const ecgC = document.getElementById('ecgCanvas'), eegC = document.getElementById('eegCanvas');
+        const ecgCtx = ecgC.getContext('2d'), eegCtx = eegC.getContext('2d');
+        ecgC.width = 1000; eegC.width = 1000;
+        let x = 0;
+
+        function animate() {
+            if(x > 1000) { x = 0; ecgCtx.clearRect(0,0,1000,150); eegCtx.clearRect(0,0,1000,150); }
+            ecgCtx.strokeStyle = '#00ff41'; ecgCtx.lineWidth = 2.5; ecgCtx.beginPath();
+            ecgCtx.moveTo(x, 75);
+            let pos = x % 120;
+            let y = 75;
+            if(pos < 10) y = 75 - 5;
+            else if(pos >= 15 && pos < 25) y = (pos % 2 === 0) ? 10 : 140; // QRS Complex
+            else if(pos >= 45 && pos < 60) y = 75 - 12; // T-wave
+            ecgCtx.lineTo(x + 2, y + (Math.random()*1.5)); ecgCtx.stroke();
+
+            eegCtx.strokeStyle = '#00e5ff'; eegCtx.lineWidth = 2; eegCtx.beginPath();
+            eegCtx.moveTo(x, 75);
+            eegCtx.lineTo(x + 2, 75 + (Math.random()-0.5)*35); eegCtx.stroke();
+            x += 2; requestAnimationFrame(animate);
+        }
+        animate();
+
+        // AI CLINICAL LOG ENGINE
+        const logBox = document.getElementById('clinicalLog');
+        function addLog(desc, reason, action, status='normal') {
+            let div = document.createElement('div'); div.className = 'log-entry';
+            div.innerHTML = `
+                <span class="log-time">[${new Date().toLocaleTimeString()}]</span>
+                <span class="log-msg" style="color: ${status==='alert'?'var(--danger)':'white'}">${desc}</span>
+                <span class="log-reason">Reasoning: ${reason}</span>
+                <span class="log-action">Action: ${action}</span>
+            `;
+            logBox.appendChild(div); logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        setInterval(() => {
+            fleet.forEach(p => {
+                p.hr = 68 + Math.floor(Math.random()*15);
+                document.getElementById('phr-'+p.id).innerText = p.hr;
+                document.getElementById('prow-'+p.id).className = (p.hr > 85) ? 'p-row critical' : 'p-row';
+            });
+            let fP = fleet[focusedID-1];
+            document.getElementById('bpmVal').innerText = fP.hr;
+            document.getElementById('heartModel').style.animationDuration = (60 / fP.hr) + "s";
+
+            // PREDICTION LOGIC (Early Warning)
+            let risk = (fP.hr > 85) ? (Math.random()*20+5).toFixed(1) : (Math.random()*1.2).toFixed(1);
+            document.getElementById('riskDisplay').innerText = risk + "%";
+            document.getElementById('riskDisplay').style.color = (risk > 5) ? "var(--danger)" : "var(--green)";
+
+            if(risk > 5) {
+                document.getElementById('mainWrapper').classList.add('emergency-mode');
+                addLog("EARLY WARNING: Tachycardia predicted in ~8 mins.", "Abnormal cardiac spike vs neural baseline.", "Prepare 5mg Metoprolol.", "alert");
+            } else {
+                document.getElementById('mainWrapper').classList.remove('emergency-mode');
+                if(Math.random() > 0.8) addLog("Hemodynamic stability confirmed.", "Biometric waves synchronized with metabolism.", "Maintain protocols.");
+            }
+        }, 5000);
+
+        function askAI() {
+            let input = document.getElementById('chatInput').value.toLowerCase();
+            let box = document.getElementById('chatMessages');
+            box.innerHTML += `<div style="text-align:right; margin-bottom:10px;"><b>You:</b> ${input}</div>`;
+            setTimeout(() => {
+                let res = input.includes("insulin") ? "Insulin is sufficient for current glucose levels." : "Analysis complete. All parameters stable.";
+                box.innerHTML += `<div class="bot-msg"><b>Bio-Chronos AI:</b> ${res}</div>`;
+                box.scrollTop = box.scrollHeight;
+            }, 500);
+            document.getElementById('chatInput').value = "";
+        }
+    </script>
+</body>
+</html>
