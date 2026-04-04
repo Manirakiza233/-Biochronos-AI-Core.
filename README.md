@@ -16,6 +16,7 @@ Biochronos AI is a high-precision clinical decision support system designed to b
    Integrates Real-time Telomere Attrition analysis to calculate the **Mortality Probability Index (MPI)**, providing a biological-age-based prognosis.
 
 ## 🖥️ UI Dashboard Preview
+![Biochronos Dashboard](Dashboard.jpg)
 *The dashboard features a Cyber-Grid interface with Pulse Red indicators for Bio-Vitality Index (BVI).*
 > **Status:** Prototype Development Phase (Targeting PIERC Lab Integration).
 
