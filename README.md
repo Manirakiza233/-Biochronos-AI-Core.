@@ -1,7 +1,7 @@
 # Biochronos AI-Core 🧠⏱️
 ### Next-Generation Predictive Analytics for Critical Care & ICU Environments
 
-**Lead Researcher & Developer:** manirakiza egide  
+**Lead Researcher & Developer:** Manirakiza egide  
 **Academic Affiliation:** Prospective Student, Parul University (BSc Anesthesia & Critical Care)
 
 ---
